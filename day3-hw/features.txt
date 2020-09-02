@@ -1,0 +1,8 @@
+160095 CDS
+   4 Selenocysteine
+79026 UTR
+185755 exon
+17320 gene
+30367 start_codon
+30274 stop_codon
+34176 transcript
