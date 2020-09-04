@@ -1,21 +1,26 @@
 #!/usr/bin/env python3
 
+import sys
+
 from fasta_iterator_class import FASTAReader
 
+target_file = sys.argv[1]
+query_file = sys.argv[2]
+
+k = int(sys.argv[3])
 
 kmers = {}
 
 our_seq = {}
 
-k = 11
 
-for seq_id, sequence in FASTAReader(open('droYak2_seq.fa')):    
+for seq_id, sequence in FASTAReader(open(query_file)):    
     for i in range(0, len(sequence) - k + 1):
         kmer = sequence[i:i + k]
         kmers.setdefault(kmer,[])
         kmers[kmer].append(i)
 
-for seq_id, sequence in FASTAReader(open('subset.fa')):
+for seq_id, sequence in FASTAReader(open(target_file)):
     for i in range(0, len(sequence) - k + 1):
         t_kmer = sequence[i:i + k]
         our_seq.setdefault(t_kmer,{})
