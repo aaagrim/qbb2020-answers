@@ -1,0 +1,22 @@
+awk '{gsub(/chrXVI/, "16"); gsub(/chrXV/, "15"); gsub(/chrXIV/, "14");\
+      gsub(/chrXIII/, "13"); gsub(/chrXII/, "12"); gsub(/chrXI/, "11");\
+      gsub(/chrX/, "10"); gsub(/chrIX/, "9"); gsub(/chrVIII/, "8");\
+      gsub(/chrVII/, "7"); gsub(/chrVI/, "6"); gsub(/chrV/, "5");\
+      gsub(/chrIV/, "4"); gsub(/chrIII/, "3"); gsub(/chrII/, "2"); gsub(/chrI/, "1");gsub(/chrM/, "M");\
+      print;}' BYxRM_segs_saccer3.bam.simplified.vcf > renumbered.vcf
+
+plink --vcf ~/qbb2020-answers/week3/week3-homework/renumbered.vcf --pca --mind
+
+plink \
+  --vcf renumbered.vcf \
+  --pheno n_Phenotype.txt \
+  --all-pheno \
+  --linear \
+  --allow-no-sex \
+  --covar plink.eigenvec \
+  --covar-number 1-10
+  
+    
+less -S BYxRM_segs_saccer3.bam.simplified.vcf
+grep "#CHROM" BYxRM_segs_saccer3.bam.simplified.vcf  > chr13_24565.txt
+grep "chrXIII" BYxRM_segs_saccer3.bam.simplified.vcf | grep "24565" >> chr13_24565.txt
