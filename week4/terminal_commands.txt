@@ -1,0 +1,2 @@
+transeq seqdump.txt stdout > translation.txt
+mafft translation.txt > mas.fa
