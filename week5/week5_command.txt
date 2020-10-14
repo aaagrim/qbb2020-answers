@@ -1,0 +1,26 @@
+bowtie2-build chr19.fa chr19
+
+
+for sample in CTCF_ER4 CTCF_G1E input_ER4 input_G1E
+
+do
+  bowtie2 -x chr19 -U ${sample}.fastq -S ${sample}.sam -p 6
+  samtools view -bSo ${sample}.bam ${sample}.sam
+  samtools sort ${sample}.bam -o ${sample}.sorted.bam
+  samtools index ${sample}.sorted.bam
+done
+
+macs2 callpeak -t CTCF_ER4.bam -c input_ER4.bam --format=BAM --name=CTCF_ER4 --gsize=61000000 --tsize=36
+macs2 callpeak -t CTCF_G1E.bam -c input_G1E.bam --format=BAM --name=CTCF_G1E --gsize=61000000 --tsize=36
+
+bedtools intersect -a CTCF_G1E_peaks.narrowPeak -b  CTCF_ER4_peaks.narrowPeak -v > lost_features.bed
+bedtools intersect -a CTCF_ER4_peaks.narrowPeak -b  CTCF_G1E_peaks.narrowPeak -v > gain_features.bed
+
+bedtools intersect -a Mus_musculus.GRCm38.94_features.bed -b CTCF_G1E_peaks.narrowPeak > G1E_binding.bed
+bedtools intersect -a Mus_musculus.GRCm38.94_features.bed -b CTCF_ER4_peaks.narrowPeak > ER4_binding.bed
+
+cut -f 4 G1E_binding.bed | sort | uniq -c > G1E_features.txt
+cut -f 4 ER4_binding.bed | sort | uniq -c > Er4_features.txt
+
+wc -l lost_features.bed > loss_gain.txt
+wc -l gain_features.bed >> loss_gain.txt
