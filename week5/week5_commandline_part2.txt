@@ -1,0 +1,5 @@
+sort -grk 8 CTCF_ER4_peaks.narrowPeak | head -n 100 > strongest100.narrowPeak
+bedtools getfasta -fi chr19.fa -bed strongest100.narrowPeak -fo top100ER4.fasta
+meme-chip -meme-maxw 20 -db ~/Downloads/motif_databases/JASPAR/JASPAR_CORE_2016.meme top100ER4.fasta 
+epstopdf memechip_out/meme_out/logo1.eps logo1.pdf
+
