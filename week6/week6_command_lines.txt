@@ -1,0 +1,23 @@
+fastqc SRR3083929_1.chr6.fastq
+bismark_genome_preparation --parallel 4  chr6
+
+bismark chr6 -1 SRR3083926_1.chr6.fastq -2 SRR3083926_2.chr6.fastq 
+bismark chr6 -1 SRR3083929_1.chr6.fastq -2 SRR3083929_2.chr6.fastq 
+
+samtools sort SRR3083926_1.chr6_bismark_bt2_pe.bam -o SRR3083926_1.chr6_bismark_bt2_pe.sorted.bam
+samtools sort SRR3083929_1.chr6_bismark_bt2_pe.bam -o SRR3083929_1.chr6_bismark_bt2_pe.sorted.bam
+
+samtools index SRR3083926_1.chr6_bismark_bt2_pe.sorted.bam
+samtools index SRR3083929_1.chr6_bismark_bt2_pe.sorted.bam
+
+
+bismark_methylation_extractor SRR3083926_1.chr6_bismark_bt2_pe.sorted.bam --bedgraph --comprehensive
+bismark_methylation_extractor SRR3083929_1.chr6_bismark_bt2_pe.sorted.bam --bedgraph --comprehensive
+
+
+gunzip SRR3083926_1.chr6_bismark_bt2_pe.sorted.bedGraph.gz
+gunzip SRR3083929_1.chr6_bismark_bt2_pe.sorted.bedGraph.gz
+
+
+igv
+
