@@ -1,0 +1,16 @@
+hifive fends -L genome/mm9.len --binned 100000 step1part
+hifive hic-data -X data/WT_100kb/raw_\*.mat step1part hiinteraction
+hifive hic-project -f 25 -n 25 -j 100000 hiinteraction hiproject
+hifive hic-normalize express -f 25 -w cis hiproject
+
+python2 3danalysis.py
+
+grep '-' hic_comp.bed > negative.bed
+grep -v '-' hic_comp.bed > positive.bed
+
+bedtools intersect -a negative.bed -b data/WT_fpkm.bed
+
+bedtools intersect -a data/WT_fpkm.bed -b negative.bed -f 0.5 > neg_expression.bed
+bedtools intersect -a data/WT_fpkm.bed -b positive.bed -f 0.5 > pos_expression.bed
+
+python2 3danalysis.py
